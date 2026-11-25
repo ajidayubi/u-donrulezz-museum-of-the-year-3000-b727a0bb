@@ -29,11 +29,13 @@ def gate(text):
         problems.append("only whitespace")
     if text.splitlines() != [text]:
         problems.append("not exactly one line")
+    if any(ord(ch) < 0x20 for ch in text):
+        problems.append("contains control characters")
     return problems
 
 
 def main():
-    out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+    out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output")
     out_dir.mkdir(parents=True, exist_ok=True)
     target = out_dir / "entry.txt"
     problems = gate(LABEL)
